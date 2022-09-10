@@ -1,0 +1,165 @@
+<html  xmlns:th=https://www.thymeleaf.org/>
+
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="card">
+			<div class="card-header bg-primary text-center text-white">
+				<h3>Specialization Register</h3>
+			</div>
+			<div class="card-body">
+				<form action="save" method="POST" id="specForm">
+					<!--row#1-->
+					<div class="row">
+						<div class="col-2">
+							<label for="specCode">CODE</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="specCode" id="specCode" class="form-control" />
+						</div>
+						<div class="col-6">
+							<span id="specCodeError"></span>
+						</div>
+					</div>
+
+					<!--row#2-->
+					<div class="row">
+						<div class="col-2">
+							<label for="specName">NAME</label>
+						</div>
+						<div class="col-4">
+							<input type="text" name="specName" id="specName" class="form-control" />
+						</div>
+						<div class="col-6">
+							<span id="specNameError"></span>
+						</div>
+					</div>
+					<!--row#3-->
+					<div class="row">
+						<div class="col-2">
+							<label for="specNote">NOTE</label>
+						</div>
+						<div class="col-4">
+							<textarea name="specNote" id="specNote" class="form-control"></textarea>
+						</div>
+						<div class="col-6">
+							<span id="specNoteError"></span>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-success">
+						Create<i class="fa fa-plus-circle" aria-hidden="true"></i>
+					</button>
+				</form>
+			</div>
+			<div class="card-footer">
+			<span th:text="${msg}"></span>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function () {
+			//1.hide error section
+			$("#specCodeError").hide();
+			$("#specNameError").hide();
+			$("#specNoteError").hide();
+
+			//2.define error variable
+			var specCodeError = false;
+			var specNameError = false;
+			var specNoteError = false;
+
+			//3. validate function
+			function validate_specCode() {
+				var val = $("#specCode").val();
+				var exp = /^[A-Z]{4,12}$/;
+				if (val == "") {
+					$("#specCodeError").show();
+					$("#specCodeError").html("Please Enter <b>specCode</b>");
+					$("#specCodeError").css("color", "red");
+					specCodeError = false;
+				} else if (!exp.test(val)) {
+					$("#specCodeError").show();
+					$("#specCodeError").html("*<b>specCode</b> must be 4-12");
+					$("#specCodeError").css("color", "red");
+					specCodeError = false;
+				} else {
+					$("#specCodeError").hide();
+					specCodeError = true;
+				}
+				return specCodeError;
+			}
+
+			function validate_specName() {
+				var val = $("#specName").val();
+				var exp = /^[A-Za-z0-9\s\. ]{4,12}$/;
+				if (val == "") {
+					$("#specNameError").show();
+					$("#specNameError").html("Please Enter <b>specCode</b>");
+					$("#specNameError").css("color", "red");
+					specNameError = false;
+				} else if (!exp.test(val)) {
+					$("#specNameError").show();
+					$("#specNameError").html("*<b>specName</b> must be 4-12");
+					$("#specNameError").css("color", "red");
+					specNameError = false;
+				} else {
+					$("#specNameError").hide();
+					specNameError = true;
+				}
+				return specNameError;
+			}
+
+			function validate_specNote() {
+				var val = $("#specNote").val();
+				var exp = /^[A-Za-z0-9\s\. ]{10,150}$/;
+				if (val == "") {
+					$("#specNoteError").show();
+					$("#specNoteError").html("Please Enter <b>specNote</b>");
+					$("#specNoteError").css("color", "red");
+					specNoteError = false;
+				} else if (!exp.test(val)) {
+					$("#specNoteError").show();
+					$("#specNoteError").html("*<b>specNote</b> must be 4-12");
+					$("#specNoteError").css("color", "red");
+					specNoteError = false;
+				} else {
+					$("#specNoteError").hide();
+					specNoteError = true;
+				}
+				return specNoteError;
+			}
+			//4. action-event
+			$("#specCode").keyup(function () {
+				$(this).val($(this).val().toUpperCase());
+				validate_specCode();
+			});
+
+			$("#specName").keyup(function () {
+				$(this).val($(this).val().toUpperCase());
+				validate_specName();
+			});
+
+			$("#specNote").keyup(function () {
+				$(this).val($(this).val().toUpperCase());
+				validate_specNote();
+			});
+			//5. on submit
+			$("#specForm").submit(function () {
+				validate_specCode();
+				validate_specName();
+				validate_specNote();
+
+				if (specCodeError && specNameError && specNoteError) return true;
+				else return false;
+			});
+		});
+	</script>
+</body>
+
+</html>
